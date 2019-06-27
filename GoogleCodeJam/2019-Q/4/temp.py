@@ -27,43 +27,8 @@ def get_bit_transition_indices(response):
 			to_find = to_find^1
 	return indices
 
-def query_system(test_string):
-	print(test_string, flush=True)
-	return sys.stdin.readline().rstrip()
-
-def find_no_broken_machines(response, start_index, end_index, char):
-	no_broken_machines = 0
-	for index in range(start_index, end_index+1):
-		if char != response[index]:
-			no_broken_machines = end_index-index+1
-			break
-	return no_broken_machines
-
-def get_broken_machine_map(response, repeats):
-	chars = ['0', '1']
-	to_find = 0
-	count = 0
-	map = []
-	index = 0
-	while(index<len(response)):
-		end_index = repeats+index-1 if (repeats+index-1) < len(response) else len(response) - 1
-		no_broken = find_no_broken_machines(response, index, end_index, chars[to_find])
-		map.append([end_index, no_broken])
-		to_find=to_find^1
-		index = end_index+1-no_broken
-	return map
-
-def find_broken_machines(no_bits, no_broken_machines):
-	# get repeats for number of broken machines
+def find_broken_machines(response, no_broken_machines):
 	repeats = get_bit_repeats(no_broken_machines)
-	
-	# generate test string to query the system
-	test_string = generate_bit_string(no_bits, repeats)
-	
-	# query the system
-	response = query_system(test_string)
-	
-	# identify number of broken machines in each section of test_string
 	bit_trans = get_bit_transition_indices(response)
 
 def main():
@@ -83,5 +48,4 @@ if __name__ == "__main__":
 #	main()
 #	for i in range(1,16):
 #		print("%d %d" % (i, get_bit_repeats(i))
-	output = get_broken_machine_map("001101", 2)
-	print(output)
+	print(get_bit_transition_indices("0011001010110"))
